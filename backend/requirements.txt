@@ -1,0 +1,7 @@
+Flask==3.1.0
+flask-cors==5.0.1
+gunicorn==23.0.0
+pyalex==0.18
+react==4.3.0
+referencing==0.36.2
+requests==2.32.3
