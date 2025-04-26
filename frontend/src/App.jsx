@@ -48,7 +48,6 @@ function App() {
         <div style={{ background: '#f8f9fa', padding: '1.5rem', borderRadius: '12px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
           <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>References</h2>
 
-          {/* Loop through the citation data and display each citation */}
           {citationData.map((citation, index) => (
             <div key={index} style={{ marginBottom: '1.5rem', borderBottom: '1px solid #ddd', paddingBottom: '1.5rem' }}>
               <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>{citation.title}</h3>
