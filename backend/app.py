@@ -6,10 +6,6 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))  # Get port from env or default 5000 locally
-    app.run(host='0.0.0.0', port=port)
-
 # Configure PyAlex before creating the PyAlex instance
 PyAlex.config.email = "guo.saturn@gmail.com"  # for faster queries
 PyAlex.config.max_retries = 0
@@ -34,7 +30,7 @@ def search_papers():
         papers = []
         for paper in results:
             papers.append({
-                "id": paper.id, #might be paper_id
+                "id": paper.id,  # might be paper_id depending on PyAlex version
                 "title": paper.title,
                 "year": paper.year,
                 "authors": [{"author_id": a.author_id, "name": a.name} for a in paper.authors],
@@ -47,5 +43,6 @@ def search_papers():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))  # Heroku needs dynamic port
+    app.run(host='0.0.0.0', port=port, debug=True)
