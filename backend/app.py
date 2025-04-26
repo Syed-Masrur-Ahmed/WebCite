@@ -9,11 +9,11 @@ app = Flask(__name__)
 CORS(app)
 
 def alexConfig(email):
-    PyAlex.config.email = email
+    pyalex.config.email = email
     
-    PyAlex.config.max_retries = 0
-    PyAlex.config.retry_backoff_factor = 0.1
-    PyAlex.config.retry_http_codes = [429, 500, 503]
+    config.max_retries = 0
+    config.retry_backoff_factor = 0.1
+    config.retry_http_codes = [429, 500, 503]
 
 alexConfig("guo.saturn@gmail.com")
 
