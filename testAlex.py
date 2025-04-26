@@ -17,44 +17,96 @@ config.retry_backoff_factor = 0.1
 config.retry_http_codes = [429, 500, 503]
 
 
+# Get a single Work, Author, Source, Institution, Concept, Topic, Publisher or Funder from OpenAlex by the OpenAlex ID, or by DOI or ROR.
+Works()["W2741809807"]
+# same as
+Works()["https://doi.org/10.7717/peerj.4375"]
+print(Works()["W2741809807"]["title"])
+print(Works().keys())  # Get all available fields for a Work
 
 
 
-def main():
-    print("PyAlex Example - OpenAlex API")
-    
-    # Example 1: Search for a specific paper by DOI
-    print("\nExample 1: Get paper by DOI")
-    work = Works()["https://doi.org/10.1038/s41586-020-2649-2"]
-    print(f"Title: {work['title']}")
-    print(f"Publication date: {work.get('publication_date')}")
-    print(f"Citation count: {work.get('cited_by_count')}")
-    
-    # Example 2: Search for works with a specific keyword
-    # Using the correct syntax for sort method in v0.18
-    print("\nExample 2: Search for works with keyword 'artificial intelligence'")
-    works = Works().search("artificial intelligence").sort(cited_by_count="desc").limit(5)
-    for i, work in enumerate(works, 1):
-        print(f"{i}. {work['title']} - Citations: {work.get('cited_by_count')}")
-    
-    # Example 3: Find works citing a specific paper
-    print("\nExample 3: Find papers citing a specific work")
-    citing_works = Works().filter(cites=work['id']).sort(cited_by_count="desc").limit(3)
-    for i, citing in enumerate(citing_works, 1):
-        print(f"{i}. {citing['title']} - Citations: {citing.get('cited_by_count')}")
-    
-    # Example 4: Find works by a top author in a field
-    print("\nExample 4: Find works by a top author in machine learning")
-    # First find authors in machine learning
-    ml_authors = Authors().search("machine learning").sort(works_count="desc").limit(1)
-    top_author = next(ml_authors)
-    print(f"Top author: {top_author.get('display_name')} - Works: {top_author.get('works_count')}")
-    
-    # Get their recent works
-    recent_works = Works().filter(author_id=top_author['id']).sort(publication_date="desc").limit(3)
-    print("Recent works:")
-    for i, work in enumerate(recent_works, 1):
-        print(f"{i}. {work['title']} ({work.get('publication_date', 'No date')})")
 
-if __name__ == "__main__":
-    main()
+
+# The result is a Work object, which is very similar to a dictionary. Find the available fields with .keys().
+# For example, get the open access status:
+
+Works()["W2741809807"]["open_access"]
+{'is_oa': True, 'oa_status': 'gold', 'oa_url': 'https://doi.org/10.7717/peerj.4375'}
+# The previous works also for Authors, Sources, Institutions, Concepts and Topics
+
+Authors()["A5027479191"]
+Authors()["https://orcid.org/0000-0002-4297-0502"]  # same
+
+
+# Get a random Work, Author, Source, Institution, Concept, Topic, Publisher or Funder.
+Works().random()
+Authors().random()
+Sources().random()
+Institutions().random()
+Topics().random()
+Publishers().random()
+Funders().random()
+#Get abstract
+# Only for Works. Request a work from the OpenAlex database:
+w = Works()["W3128349626"]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# def main():
+#     print("PyAlex Example - OpenAlex API")
+    
+#     # Example 1: Search for a specific paper by DOI
+#     print("\nExample 1: Get paper by DOI")
+#     work = Works()["https://doi.org/10.1038/s41586-020-2649-2"]
+#     print(f"Title: {work['title']}")
+#     print(f"Publication date: {work.get('publication_date')}")
+#     print(f"Citation count: {work.get('cited_by_count')}")
+    
+#     # Example 2: Search for works with a specific keyword
+#     # Using the correct syntax for sort method in v0.18
+#     print("\nExample 2: Search for works with keyword 'artificial intelligence'")
+#     works = Works().search("artificial intelligence").sort(cited_by_count="desc").limit(5)
+#     for i, work in enumerate(works, 1):
+#         print(f"{i}. {work['title']} - Citations: {work.get('cited_by_count')}")
+    
+#     # Example 3: Find works citing a specific paper
+#     print("\nExample 3: Find papers citing a specific work")
+#     citing_works = Works().filter(cites=work['id']).sort(cited_by_count="desc").limit(3)
+#     for i, citing in enumerate(citing_works, 1):
+#         print(f"{i}. {citing['title']} - Citations: {citing.get('cited_by_count')}")
+    
+#     # Example 4: Find works by a top author in a field
+#     print("\nExample 4: Find works by a top author in machine learning")
+#     # First find authors in machine learning
+#     ml_authors = Authors().search("machine learning").sort(works_count="desc").limit(1)
+#     top_author = next(ml_authors)
+#     print(f"Top author: {top_author.get('display_name')} - Works: {top_author.get('works_count')}")
+    
+#     # Get their recent works
+#     recent_works = Works().filter(author_id=top_author['id']).sort(publication_date="desc").limit(3)
+#     print("Recent works:")
+#     for i, work in enumerate(recent_works, 1):
+#         print(f"{i}. {work['title']} ({work.get('publication_date', 'No date')})")
+
+# if __name__ == "__main__":
+#     main()
