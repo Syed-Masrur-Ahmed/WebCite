@@ -1,0 +1,27 @@
+# NFS files
+.nfs*
+
+# core dumps
+core
+
+# Object files and libraries
+*.o
+*.a
+a.out
+
+# Emacs backup and scratch files
+*~
+\#*\#
+.\#*
+
+# debugger symbols
+*.dSYM
+
+# MacOS stuff
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V*
+.Trashes
