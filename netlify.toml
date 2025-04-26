@@ -1,0 +1,4 @@
+[build]
+  base = "frontend"     # Directory where package.json is located
+  command = "npm run build"
+  publish = "dist"      # Output directory after build (usually "dist" for Vite)
