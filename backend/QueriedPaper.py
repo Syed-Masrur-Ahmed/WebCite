@@ -18,7 +18,7 @@ class QueriedPaper:
             print(f"An error has occured in object initialization: {e}")
 
         if self.work:
-            self.setup(self.work)
+            self.setup()
 
     def createWork(self, titleOrDOI):
         try:
@@ -29,12 +29,12 @@ class QueriedPaper:
             if not self.work:
                 print("The article's Work object has not been initialized.")
     
-    def getReferenced(self, work):
+    def getReferenced(self):
         try:
-            if work:
-                referenced = Works()[work["referenced_works"]]
+            if self.work:
+                referenced = Works()[self.work["referenced_works"]]
                 print("The article's referenced objects have been obtained.")
-            if not work:
+            if not self.work:
                 pass
         except Exception as e:
             print(f"An error has occured: {e}")
@@ -44,8 +44,8 @@ class QueriedPaper:
         
         return referenced
     
-    def authorSetup(self, work):
-        authorships = work["authorships"]
+    def authorSetup(self):
+        authorships = self.work["authorships"]
         authors = []
 
         for author_info in authorships:
@@ -54,11 +54,10 @@ class QueriedPaper:
         
         return authors
     
-    def setup(self, work):
-        self.referenced = self.getReferenced(work)
-        self.title = work["title"]
-        self.authors = self.authorSetup(work) 
+    def setup(self):
+        self.referenced = self.getReferenced()
+        self.title = self.work["title"]
+        self.authors = self.authorSetup() 
 
-    def test(self):
-        print(self.authors)
-        print(self.title)
+    def getReferences(self):
+        return self.referenced
