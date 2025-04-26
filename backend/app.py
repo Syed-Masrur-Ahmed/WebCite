@@ -1,4 +1,6 @@
-from pyalex import PyAlex, Works
+from pyalex import Works, Authors, Sources, Institutions, Topics, Publishers, Funders
+from pyalex import config
+import pyalex
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import os
