@@ -1,23 +1,18 @@
-from pyalex import PyAlex
-from pyalex import Works, Authors, Sources, Institutions, Topics, Publishers, Funders
+from pyalex import PyAlex, Works
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import os
 
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))  # Get port from env or default 5000 locally
-    app.run(host='0.0.0.0', port=port)
-    
-PyAlex.config.email = "guo.saturn@gmail.com" #for faster queries
-
-config.max_retries = 0
-config.retry_backoff_factor = 0.1
-config.retry_http_codes = [429, 500, 503] #for retries, if there's an error
+# Configure PyAlex before creating the PyAlex instance
+PyAlex.config.email = "guo.saturn@gmail.com"  # for faster queries
+PyAlex.config.max_retries = 0
+PyAlex.config.retry_backoff_factor = 0.1
+PyAlex.config.retry_http_codes = [429, 500, 503]  # retry settings
 
 app = Flask(__name__)
 CORS(app)
 
-palex = PyAlex() 
+palex = PyAlex()
 
 @app.route('/api/search', methods=['GET'])
 def search_papers():
