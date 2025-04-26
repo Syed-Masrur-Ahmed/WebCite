@@ -6,36 +6,45 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-# Configure PyAlex before creating the PyAlex instance
-PyAlex.config.email = "guo.saturn@gmail.com"  # for faster queries
-PyAlex.config.max_retries = 0
-PyAlex.config.retry_backoff_factor = 0.1
-PyAlex.config.retry_http_codes = [429, 500, 503]  # retry settings
+def alexConfig(email):
+    PyAlex.config.email = email
+    
+    PyAlex.config.max_retries = 0
+    PyAlex.config.retry_backoff_factor = 0.1
+    PyAlex.config.retry_http_codes = [429, 500, 503]
 
-palex = PyAlex()
+alexConfig("guo.saturn@gmail.com")
+
+def authorSetup(work):
+    authorships = work["authorships"]
+    authors = []
+
+    for author_info in authorships:
+            author_name = author_info["author"]["display_name"]
+            authors.append(author_name)
+        
+    return authors
 
 @app.route('/')
 def hello():
     return {"message": "is the backend deployment working chat"}
 
 @app.route('/api/search', methods=['GET'])
-def search_papers():
+def query():
     query = request.args.get('q', '')
     if not query:
         return jsonify({"error": "Query parameter 'q' is required"}), 400
-
+    
     try:
-        results = Works(query=query, limit=10)
+        paper = QueriedPaper(query)
+        references = paper.getReferenced()
 
         papers = []
-        for paper in results:
+        for reference in references:
             papers.append({
-                "id": paper.id,  # might be paper_id depending on PyAlex version
-                "title": paper.title,
-                "year": paper.year,
-                "authors": [{"author_id": a.author_id, "name": a.name} for a in paper.authors],
-                "citation_count": paper.citation_count,
-                "reference_count": paper.reference_count
+                "title": reference["title"],
+                "authors": authorSetup(reference),
+                "doi": reference["doi"],
             })
 
         return jsonify(papers)
