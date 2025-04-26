@@ -22,12 +22,27 @@ Works()["W2741809807"]
 # same as
 Works()["https://doi.org/10.7717/peerj.4375"]
 print(Works()["W2741809807"]["title"])
-print(Works().keys())  # Get all available fields for a Work
+#print(Works()["W2741809807"].keys())
 
 
+## from the keys, the important ones are:
+print(Works()["W2741809807"]["doi"])  # DOI of the work
+print(Works()["W2741809807"]["id"])  # OpenAlex ID of the work
+print(Works()["W2741809807"]["cited_by_count"])  # Number of citations
+print(Works()["W2741809807"]["publication_date"])  # Publication date of the work
+type_crossref = Works()["W2741809807"]["type_crossref"]  # Type of the work according to CrossRef
+authorships = Works()["W2741809807"]["authorships"]  # List of authorship objects
+cited_by_count = Works()["W2741809807"]["cited_by_count"]  # Number of citations
+authorships = [authorship["author"]["display_name"] for authorship in authorships]  # List of author names
+print(f"Type (CrossRef): {type_crossref}")
+print(f"Authorships: {authorships}")
+print(f"Cited by count: {cited_by_count}")
 
+# print("Available keys:")
+# for key in Works()["W2741809807"].keys():
+#     print(f"- {key}")
 
-
+#print(Authors()["W2741809807"].keys())
 # The result is a Work object, which is very similar to a dictionary. Find the available fields with .keys().
 # For example, get the open access status:
 
@@ -41,25 +56,31 @@ Authors()["https://orcid.org/0000-0002-4297-0502"]  # same
 
 # Get a random Work, Author, Source, Institution, Concept, Topic, Publisher or Funder.
 Works().random()
-Authors().random()
+random_author = Authors().random()
+print(f"Random Author: {random_author['display_name']} (ID: {random_author['id']})")
+print("random_author keys: \n", random_author.keys())
+# random_author keys: 
+# dict_keys(['id', 'orcid', 'display_name', 'display_name_alternatives', 'works_count',
+# 'cited_by_count', 'summary_stats', 'ids', 'affiliations', 'last_known_institutions',
+# 'topics', 'topic_share', 'x_concepts', 'counts_by_year', 'works_api_url',
+# 'updated_date', 'created_date'])
+
 Sources().random()
 Institutions().random()
 Topics().random()
 Publishers().random()
 Funders().random()
-#Get abstract
-# Only for Works. Request a work from the OpenAlex database:
-w = Works()["W3128349626"]
+
+random_topics = Topics().random()
+print("random_topics keys: \n", random_topics.keys())
+print(f"Random Topic: {random_topics['display_name']} (ID: {random_topics['id']})")
+# dict_keys(['id', 'display_name', 'description', 'keywords', 'ids', 'subfield', 'field',
+# 'domain', 'siblings', 'works_count', 'cited_by_count', 'updated_date', 'created_date'])
 
 
-
-
-
-
-
-
-
-
+random_source = Sources().random()
+print("random_source keys: \n", random_source.keys())
+print(f"Random Source: {random_source['display_name']} (ID: {random_source['id']})")
 
 
 
