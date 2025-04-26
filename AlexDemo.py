@@ -1,5 +1,13 @@
 from QueriedPaper import QueriedPaper
 
 #tests
-queredTest = QueriedPaper("https://doi.org/10.2979/jfemistudreli.34.1.06")
-queredTest.test()
+queriedTest = QueriedPaper("https://doi.org/10.2979/jfemistudreli.34.1.06")
+
+print(queriedTest.title)
+print(queriedTest.authors)
+referenced = queriedTest.referenced
+
+for work in referenced:
+    print(work["title"])
+
+

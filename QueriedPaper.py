@@ -41,6 +41,8 @@ class QueriedPaper:
         finally:
             if not referenced:
                 print("The article's Referenced dictionary has not been initialized.")
+        
+        return referenced
     
     def authorSetup(self, work):
         authorships = work["authorships"]
