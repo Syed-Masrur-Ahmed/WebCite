@@ -116,6 +116,7 @@ class QueriedPaper:
                 break
 
             l = (L - N) / n
+            print("limit is " + str(l))
             
             if l < 1:
                 break
