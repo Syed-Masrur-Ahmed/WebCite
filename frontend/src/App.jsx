@@ -37,6 +37,7 @@ function App() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [hoveredNode, setHoveredNode] = useState(null);
+  const [nodeLimit, setNodeLimit] = useState('');
   const fgRef = useRef();
 
   // Tooltip position for hover info box
@@ -49,11 +50,11 @@ function App() {
     setHoveredNode(null);
 
     try {
-      const response = await axios.get(
-        `https://webcite-71wh.onrender.com/api/search?q=${encodeURIComponent(
+      const url = `https://webcite-71wh.onrender.com/api/search?q=${encodeURIComponent(
           inputId
-        )}`
-      );
+        )}&limit=${nodeLimit}`;
+      const response = await axios.get(url);
+      console.log(url);
 
       const { nodes, edges } = response.data;
 
@@ -117,6 +118,14 @@ function App() {
                   handleFetch();
                 }
               }}
+            />
+            <TextField
+              label="Node Limit"
+              type="number"
+              inputProps={{ min: 1 }}
+              value={nodeLimit}
+              onChange={(e) => setNodeLimit(e.target.value)}
+              sx={{ width: 200, mr: 2 }}
             />
             <Button
               variant="contained"

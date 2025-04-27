@@ -35,13 +35,21 @@ def hello():
 @app.route('/api/search', methods=['GET'])
 def query():
     query = request.args.get('q', '')
+    limit_str = request.args.get('limit', None)
+    try:
+        limit = int(limit_str)
+    except (TypeError, ValueError):
+        limit = None 
+    print(limit)    
     if not query:
         return jsonify({"error": "Query parameter 'q' is required"}), 400
+    if not limit:
+        return jsonify({"error": "Limit is required"}), 400
     
     try:
         paper = QueriedPaper(query)
         references = paper.getReferenced()
-        g = paper.makeGraph(50)
+        g = paper.makeGraph(limit)
 
         nodes = []
         for node, data in g.nodes(data=True):
