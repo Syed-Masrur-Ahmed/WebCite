@@ -5,3 +5,4 @@ pyalex==0.18
 react==4.3.0
 referencing==0.36.2
 requests==2.32.3
+networkx=3.4.2
