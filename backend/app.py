@@ -41,16 +41,29 @@ def query():
     try:
         paper = QueriedPaper(query)
         references = paper.getReferenced()
+        g = paper.makeGraph(50)
 
-        papers = []
-        for reference in references:
-            papers.append({
-                "title": reference["title"],
-                "authors": authorSetup(reference),
-                "doi": reference["doi"],
+        nodes = []
+        for node, data in g.nodes(data=True):
+            nodes.append({
+                "id": str(node),
+                "label": node.title,
+                "title": node.title,
+                "authors": authorSetup(node.work),
+                "doi": node.doi
             })
 
-        return jsonify(papers)
+        edges = []
+        for source, target in g.edges():
+            edges.append({
+                "source": str(source),
+                "target": str(target)
+            })
+
+        return jsonify({
+            "nodes": nodes,
+            "edges": edges,
+        })
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
