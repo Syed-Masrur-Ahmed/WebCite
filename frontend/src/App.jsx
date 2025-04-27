@@ -160,7 +160,7 @@ function App() {
         {graphData && (
           <Box
             sx={{
-              overflow: 'hidden',
+              overflow: "hidden",
               borderRadius: 3,
               boxShadow: 3,
               height: 600,
@@ -173,63 +173,11 @@ function App() {
               ref={fgRef}
               graphData={graphData}
               nodeId="id"
-              nodeLabel={(node) => node.title.substring(0,19)+ '...' || node.label.substring(0,19)+ '...' || node.id.substring(0,19)+ '...'}
-              linkColor={(link) => link.indexColor || "rgba(50, 50, 50, 0.3)"}
-              // nodeAutoColorBy="doi"
-              style={{ width: "100%", height: "100%"}}
-              enableNodeDrag={true}
-              onNodeHover={handleNodeHover}
-              onNodeClick={(node) => {
-                if (node?.doi) {
-                  const url = node.doi.startsWith("http")
-                    ? node.doi
-                    : `https://doi.org/${node.doi}`;
-                  window.open(url, "_blank", "noopener,noreferrer");
-                }
-              }}
-              onBackgroundClick={() => setHoveredNode(null)}
-              onCanvasHover={handleCanvasMouseMove}
-              d3AlphaDecay={0.02}
-              d3VelocityDecay={0.4}
-              d3Force={(force) => {
-                force("link").distance(180);
-                force("charge").strength(-150);
-                force("collision").radius(20).strength(0.7);
-              }}
-              nodeCanvasObject={(node, ctx, globalScale) => {
-                const label = node.title.substring(0,19)+ '...' || node.label.substring(0,19)+ '...' || node.id.substring(0,19)+ '...';
-                const fontSize = 12 / globalScale;
-                const radius = node === hoveredNode ? 12 : 10;
-                ctx.shadowColor = 'rgba(0,0,0,0.5)';
-                ctx.shadowBlur = 10;
-                ctx.font = `${fontSize}px Sans-Serif`;
-                ctx.fillStyle = node === hoveredNode ? theme.palette.secondary.main : theme.palette.primary.main;
-                ctx.beginPath();
-                ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI, false);
-                ctx.fill();
-                ctx.shadowBlur = 0;
-                ctx.strokeStyle = '#162419';
-                ctx.lineWidth = 1;
-                ctx.stroke();
-                ctx.fillStyle = "black";
-                ctx.textAlign = "center";
-                ctx.textBaseline = "middle";
-                ctx.fillText(label, node.x, node.y - 12);
-              }}
-              linkCanvasObject={(link, ctx) => {
-                ctx.strokeStyle = "rgba(70, 70, 70, 0.7)";
-                ctx.lineWidth = 2;
-                ctx.beginPath();
-                ctx.moveTo(link.source.x, link.source.y);
-                ctx.lineTo(link.target.x, link.target.y);
-                ctx.stroke();
-              }}
-            />
-            <ForceGraph2D
-              ref={fgRef}
-              graphData={graphData}
-              nodeId="id"
-              nodeLabel={(node) => node.title.substring(0,19)+ '...' || node.label.substring(0,19)+ '...' || node.id.substring(0,19)+ '...'}
+              nodeLabel={(node) =>
+                node.title.substring(0, 19) + "..." ||
+                node.label.substring(0, 19) + "..." ||
+                node.id.substring(0, 19) + "..."
+              }
               linkColor={(link) => link.indexColor || "rgba(50, 50, 50, 0.3)"}
               // nodeAutoColorBy="doi"
               style={{ width: "100%", height: "100%" }}
@@ -253,18 +201,94 @@ function App() {
                 force("collision").radius(20).strength(0.7);
               }}
               nodeCanvasObject={(node, ctx, globalScale) => {
-                const label = node.title.substring(0,19)+ '...' || node.label.substring(0,19)+ '...' || node.id.substring(0,19)+ '...';
+                const label =
+                  node.title.substring(0, 19) + "..." ||
+                  node.label.substring(0, 19) + "..." ||
+                  node.id.substring(0, 19) + "...";
                 const fontSize = 12 / globalScale;
                 const radius = node === hoveredNode ? 12 : 10;
-                ctx.shadowColor = 'rgba(0,0,0,0.5)';
+                ctx.shadowColor = "rgba(0,0,0,0.5)";
                 ctx.shadowBlur = 10;
                 ctx.font = `${fontSize}px Sans-Serif`;
-                ctx.fillStyle = node === hoveredNode ? theme.palette.secondary.main : theme.palette.primary.main;
+                ctx.fillStyle =
+                  node === hoveredNode
+                    ? theme.palette.secondary.main
+                    : node.id === graphData.nodes[0].id
+                    ? "orange"
+                    : theme.palette.primary.main;
                 ctx.beginPath();
                 ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI, false);
                 ctx.fill();
                 ctx.shadowBlur = 0;
-                ctx.strokeStyle = '#162419';
+                ctx.strokeStyle = "#162419";
+                ctx.lineWidth = 1;
+                ctx.stroke();
+                ctx.fillStyle = "black";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText(label, node.x, node.y - 12);
+              }}
+              linkCanvasObject={(link, ctx) => {
+                ctx.strokeStyle = "rgba(70, 70, 70, 0.7)";
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(link.source.x, link.source.y);
+                ctx.lineTo(link.target.x, link.target.y);
+                ctx.stroke();
+              }}
+            />
+            <ForceGraph2D
+              ref={fgRef}
+              graphData={graphData}
+              nodeId="id"
+              nodeLabel={(node) =>
+                node.title.substring(0, 19) + "..." ||
+                node.label.substring(0, 19) + "..." ||
+                node.id.substring(0, 19) + "..."
+              }
+              linkColor={(link) => link.indexColor || "rgba(50, 50, 50, 0.3)"}
+              // nodeAutoColorBy="doi"
+              style={{ width: "100%", height: "100%" }}
+              enableNodeDrag={true}
+              onNodeHover={handleNodeHover}
+              onNodeClick={(node) => {
+                if (node?.doi) {
+                  const url = node.doi.startsWith("http")
+                    ? node.doi
+                    : `https://doi.org/${node.doi}`;
+                  window.open(url, "_blank", "noopener,noreferrer");
+                }
+              }}
+              onBackgroundClick={() => setHoveredNode(null)}
+              onCanvasHover={handleCanvasMouseMove}
+              d3AlphaDecay={0.02}
+              d3VelocityDecay={0.4}
+              d3Force={(force) => {
+                force("link").distance(180);
+                force("charge").strength(-150);
+                force("collision").radius(20).strength(0.7);
+              }}
+              nodeCanvasObject={(node, ctx, globalScale) => {
+                const label =
+                  node.title.substring(0, 19) + "..." ||
+                  node.label.substring(0, 19) + "..." ||
+                  node.id.substring(0, 19) + "...";
+                const fontSize = 12 / globalScale;
+                const radius = node === hoveredNode ? 12 : 10;
+                ctx.shadowColor = "rgba(0,0,0,0.5)";
+                ctx.shadowBlur = 10;
+                ctx.font = `${fontSize}px Sans-Serif`;
+                ctx.fillStyle =
+                  node === hoveredNode
+                    ? theme.palette.secondary.main
+                    : node.id === graphData.nodes[0].id
+                    ? "orange"
+                    : theme.palette.primary.main;
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI, false);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+                ctx.strokeStyle = "#162419";
                 ctx.lineWidth = 1;
                 ctx.stroke();
                 ctx.fillStyle = "black";
