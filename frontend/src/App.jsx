@@ -1,67 +1,179 @@
-import { useState } from 'react';
-import axios from 'axios';
+  import { useState } from 'react';
+  import axios from 'axios';
+  import { 
+    Box,
+    Button,
+    Card,
+    CardContent,
+    CircularProgress,
+    Container,
+    CssBaseline,
+    Link,
+    Paper,
+    TextField,
+    Typography,
+    ThemeProvider,
+    createTheme
+  } from '@mui/material';
+  import SearchIcon from '@mui/icons-material/Search';
+  import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 
-function App() {
-  const [inputId, setInputId] = useState('');
-  const [citationData, setCitationData] = useState(null);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#3f51b5',
+      },
+      secondary: {
+        main: '#f50057',
+      },
+      background: {
+        default: '#f5f7fa',
+      },
+    },
+    typography: {
+      fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+      h1: {
+        fontWeight: 700,
+        fontSize: '2.5rem',
+      },
+      h2: {
+        fontWeight: 600,
+        fontSize: '1.8rem',
+      },
+    },
+  });
 
-  const handleFetch = async () => {
-    setLoading(true);
-    setError('');
-    setCitationData(null);
+  function App() {
+    const [inputId, setInputId] = useState('');
+    const [citationData, setCitationData] = useState(null);
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
-    try {
-      const response = await axios.get(`https://webcite-hackdartmouth-4995e6597c1a.herokuapp.com/api/search?q=${inputId}`);
-      setCitationData(response.data);
-    } catch (err) {
-      setError('Failed to fetch data. Make sure the DOI is valid.');
-    } finally {
-      setLoading(false);
-    }
-  };
+    const handleFetch = async () => {
+      setLoading(true);
+      setError('');
+      setCitationData(null);
 
-  return (
-    <div style={{ padding: '2rem', fontFamily: 'Arial, sans-serif', maxWidth: '800px', margin: 'auto' }}>
-      <h1 style={{ fontSize: '2rem', marginBottom: '1rem', textAlign: 'center' }}>WebCite</h1>
+      try {
+        const response = await axios.get(`https://webcite-71wh.onrender.com/api/search?q=${inputId}`);
+        setCitationData(response.data);
+      } catch (err) {
+        setError('Failed to fetch data. Make to enter a valid DOI.');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-      <div style={{ display: 'flex', marginBottom: '2rem', justifyContent: 'center' }}>
-        <input
-          type="text"
-          placeholder="Enter DOI"
-          value={inputId}
-          onChange={(e) => setInputId(e.target.value)}
-          style={{ padding: '0.75rem', width: '400px', borderRadius: '8px', border: '1px solid #ccc', marginRight: '1rem' }}
-        />
-        <button
-          onClick={handleFetch}
-          style={{ padding: '0.75rem 1.5rem', borderRadius: '8px', backgroundColor: '#007bff', color: 'white', border: 'none' }}
-        >
-          {loading ? 'Loading...' : 'Fetch'}
-        </button>
-      </div>
+    return (
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Container maxWidth="md" sx={{ py: 4 }}>
+          <Paper elevation={3} sx={{ p: 4, mb: 4, borderRadius: 3 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+              <AutoStoriesIcon color="primary" sx={{ fontSize: 40, mr: 2 }} />
+              <Typography variant="h1" component="h1" color="primary">
+                WebCite
+              </Typography>
+            </Box>
 
-      {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                label="Enter DOI"
+                value={inputId}
+                onChange={(e) => setInputId(e.target.value)}
+                sx={{ mr: 2 }}
+                InputProps={{
+                  style: {
+                    borderRadius: 8,
+                  },
+                }}
+              />
+              <Button
+                variant="contained"
+                size="large"
+                onClick={handleFetch}
+                disabled={loading || !inputId}
+                startIcon={<SearchIcon />}
+                sx={{
+                  borderRadius: 8,
+                  px: 4,
+                  py: 1.5,
+                  textTransform: 'none',
+                  fontWeight: 600,
+                }}
+              >
+                {loading ? 'Searching...' : 'Search'}
+              </Button>
+            </Box>
 
-      {citationData && (
-        <div style={{ background: '#f8f9fa', padding: '1.5rem', borderRadius: '12px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
-          <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>References</h2>
+            {error && (
+              <Box sx={{ 
+                backgroundColor: 'error.light', 
+                color: 'error.contrastText',
+                p: 2,
+                borderRadius: 2,
+                mb: 3,
+              }}>
+                <Typography>{error}</Typography>
+              </Box>
+            )}
 
-          {citationData.map((citation, index) => (
-            <div key={index} style={{ marginBottom: '1.5rem', borderBottom: '1px solid #ddd', paddingBottom: '1.5rem' }}>
-              <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>{citation.title}</h3>
+            {loading && (
+              <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+                <CircularProgress color="primary" size={60} />
+              </Box>
+            )}
+          </Paper>
 
-              <p><strong>Authors:</strong> {citation.authors?.join(', ')}</p>
+          {citationData && (
+            <Box>
+              <Typography variant="h2" component="h2" gutterBottom sx={{ mb: 3, color: 'primary.main' }}>
+                Citation Results
+              </Typography>
 
-              <p><strong>DOI:</strong> <a href={citation.doi} target="_blank" rel="noopener noreferrer" style={{ color: '#007bff' }}>{citation.doi}</a></p>
-            </div>
-          ))}
+              {citationData.map((citation, index) => (
+                <Card key={index} sx={{ mb: 3, borderRadius: 3, boxShadow: 3 }}>
+                  <CardContent>
+                    <Typography variant="h5" component="h3" gutterBottom sx={{ fontWeight: 600 }}>
+                      {citation.title}
+                    </Typography>
 
-        </div>
-      )}
-    </div>
-  );
-}
+                    <Typography variant="body1" color="text.secondary" gutterBottom>
+                      <strong style={{ color: theme.palette.primary.main }}>Authors:</strong> {citation.authors?.join(', ')}
+                    </Typography>
 
-export default App;
+                    {citation.doi && (
+                      <Typography variant="body1" color="text.secondary">
+                        <strong style={{ color: theme.palette.primary.main }}>DOI:</strong>{' '}
+                        <Link 
+                          href={citation.doi} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          color="secondary"
+                          sx={{ textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}
+                        >
+                          {citation.doi}
+                        </Link>
+                      </Typography>
+                    )}
+
+                    {citation.abstract && (
+                      <Box sx={{ mt: 2 }}>
+                        <Typography variant="body2" sx={{ fontStyle: 'italic' }}>
+                          {citation.abstract.substring(0, 200)}...
+                        </Typography>
+                      </Box>
+                    )}
+                  </CardContent>
+                </Card>
+              ))}
+            </Box>
+          )}
+        </Container>
+      </ThemeProvider>
+    );
+  }
+
+  export default App;
