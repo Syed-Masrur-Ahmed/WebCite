@@ -2,6 +2,8 @@ from pyalex import Works, Authors, Sources, Institutions, Topics, Publishers, Fu
 from pyalex import config
 import pyalex
 from dataProcessing.QueriedPaper import QueriedPaper
+import networkx as nx
+import matplotlib.pyplot as plt
 
 def authorSetup(work):
     authorships = work["authorships"]
@@ -13,7 +15,7 @@ def authorSetup(work):
         
     return authors
 
-paper = QueriedPaper("https://doi.org/10.1103/PhysRevLett.89.011301")
+paper = QueriedPaper("https://doi.org/10.2979/jfemistudreli.34.1.06")
 references = paper.getReferenced()
 
 papers = []
@@ -24,4 +26,25 @@ for reference in references:
         "doi": reference["doi"],
     })
 
-print(papers)
+g = paper.makeGraph(200)
+
+pos = nx.spring_layout(g)
+labels = {node: node.title for node in g.nodes()}
+
+# First draw nodes and edges (but no labels yet)
+nx.draw_networkx_nodes(g, pos, node_size=500)
+nx.draw_networkx_edges(g, pos)
+
+# Then draw the labels, customizing
+nx.draw_networkx_labels(
+    g, pos,
+    labels=labels,
+    font_size=8,
+    verticalalignment='top',
+    horizontalalignment='center'
+)
+
+plt.tight_layout()
+plt.show()
+
+

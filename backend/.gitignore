@@ -26,3 +26,6 @@ Icon?
 .Spotlight-V*
 .Trashes
 __pycache__
+
+test.py
+testTwo.py
