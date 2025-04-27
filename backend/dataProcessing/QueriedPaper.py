@@ -87,7 +87,7 @@ class QueriedPaper:
 
         #mathematic definitions - see board
         l = L - 1
-        n = 1
+        n = 0
         N = 1
 
         while True:
@@ -99,15 +99,14 @@ class QueriedPaper:
 
                 if referenced:
                     for i in range(min(len(referenced), l)):
-                        N = N + 1
-                        n = n + 1
-
                         ref = referenced[i]
                         tempNode = QueriedPaper(ref["doi"])
                     
                         if tempNode.title:
                             self.graph.add_node(node, label=self.title)
                             self.graph.add_edge(node, tempNode)
+                            n += 1
+                            N += 1
 
                         if tempNode.title and tempNode.valid:
                             tmp.append(tempNode)
