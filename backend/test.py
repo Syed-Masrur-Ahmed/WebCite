@@ -15,8 +15,9 @@ def authorSetup(work):
         
     return authors
 
-paper = QueriedPaper("https://doi.org/10.2979/jfemistudreli.34.1.06")
+paper = QueriedPaper("https://doi.org/10.1016/j.jclepro.2024.140823")
 references = paper.getReferenced()
+print(references)
 
 papers = []
 for reference in references:
@@ -26,7 +27,7 @@ for reference in references:
         "doi": reference["doi"],
     })
 
-g = paper.makeGraph(200)
+g = paper.makeGraph(100)
 
 pos = nx.spring_layout(g)
 labels = {node: node.title for node in g.nodes()}
